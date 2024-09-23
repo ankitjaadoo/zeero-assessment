@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Countdown Timer</title>
+    <link rel="stylesheet" href="{% static 'countdown.css' %}">
+    <script>
+        let countdownInterval;
+        let paused = false;
+        let remainingTime;
+
+        function startCountdown(duration) {
+            let time = duration;
+            remainingTime = time;
+            const display = document.querySelector('#time-display');
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                if (!paused) {
+                    let hours = Math.floor(time / 3600);
+                    let minutes = Math.floor((time % 3600) / 60);
+                    let seconds = time % 60;
+
+                    display.textContent = `${hours}:${minutes}:${seconds}`;
+                    if (time <= 0) {
+                        clearInterval(countdownInterval);
+                    } else {
+                        time--;
+                        remainingTime = time;
+                    }
+                }
+            }, 1000);
+        }
+
+        function pauseCountdown() {
+            paused = !paused;
+            document.querySelector('#pause-btn').textContent = paused ? 'Resume' : 'Pause';
+        }
+
+        function resetCountdown() {
+            clearInterval(countdownInterval);
+            document.querySelector('#time-display').textContent = "0:0:0";
+            paused = false;
+            document.querySelector('#pause-btn').textContent = 'Pause';
+        }
+    </script>
+</head>
+<body>
+    <h1>Countdown Timer</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Set Timer</button>
+    </form>
+
+    <h2 id="time-display">0:0:0</h2>
+    {% if total_seconds %}
+    <button onclick="startCountdown({{ total_seconds }})">Start</button>
+    <button id="pause-btn" onclick="pauseCountdown()">Pause</button>
+    <button onclick="resetCountdown()">Reset</button>
+    {% endif %}
+</body>
+</html>
