@@ -19,12 +19,15 @@
 - Install required dependencies on this instance using the following commands:
 
 `sudo apt update`
+
 `sudo apt install python3-pip python3-venv nginx`
 
 - Clone your project repository on to this instance. Also setup a virtual environment and install requirements:
 
 `python -m venv venv`
+
 `source venv/bin/activate`
+
 `pip install -r requirements.txt`
 
 - Install **Gunicorn** using the following command:
@@ -68,7 +71,9 @@ server {
 - Enable the **Nginx** configuration to allow it to serve as a reverse proxy:
 
 `sudo ln -s /etc/nginx/sites-available/countdown_timer /etc/nginx/sites-enabled`
+
 `sudo nginx -t`
+
 `sudo systemctl restart nginx`
 
 ### Access the application now by visiting the instance IP address in the browser.
